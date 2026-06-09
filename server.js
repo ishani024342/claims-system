@@ -391,4 +391,163 @@ app.patch('/claims/:id/status', verifyToken, async (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
+/**
+ * @swagger
+ * /policyholders/{id}:
+ *   put:
+ *     summary: Update policyholder details
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Policyholder updated
+ *       404:
+ *         description: Not found
+ */
+app.put('/policyholders/:id', verifyToken, async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    const ph = await Policyholder.findOneAndUpdate(
+      { id: req.params.id },
+      { name, email, phone },
+      { new: true }
+    );
+    if (!ph) return res.status(404).json({ error: 'Policyholder not found' });
+    res.json(ph);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+/**
+ * @swagger
+ * /policyholders/{id}:
+ *   delete:
+ *     summary: Delete a policyholder
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Deleted successfully
+ *       404:
+ *         description: Not found
+ */
+app.delete('/policyholders/:id', verifyToken, async (req, res) => {
+  try {
+    const ph = await Policyholder.findOneAndDelete({ id: req.params.id });
+    if (!ph) return res.status(404).json({ error: 'Policyholder not found' });
+    res.json({ message: 'Policyholder deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+/**
+ * @swagger
+ * /policies/{id}:
+ *   delete:
+ *     summary: Delete a policy
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Deleted successfully
+ *       404:
+ *         description: Not found
+ */
+app.delete('/policies/:id', verifyToken, async (req, res) => {
+  try {
+    const policy = await Policy.findOneAndDelete({ id: req.params.id });
+    if (!policy) return res.status(404).json({ error: 'Policy not found' });
+    res.json({ message: 'Policy deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+/**
+ * @swagger
+ * /claims/{id}:
+ *   delete:
+ *     summary: Delete a claim
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Deleted successfully
+ *       404:
+ *         description: Not found
+ */
+app.delete('/claims/:id', verifyToken, async (req, res) => {
+  try {
+    const claim = await Claim.findOneAndDelete({ id: req.params.id });
+    if (!claim) return res.status(404).json({ error: 'Claim not found' });
+    res.json({ message: 'Claim deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+/**
+ * @swagger
+ * /policies/{id}/claims:
+ *   get:
+ *     summary: Get all claims for a specific policy
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of claims for the policy
+ *       404:
+ *         description: Policy not found
+ */
+app.get('/policies/:id/claims', verifyToken, async (req, res) => {
+  try {
+    const policy = await Policy.findOne({ id: req.params.id });
+    if (!policy) return res.status(404).json({ error: 'Policy not found' });
+    const claims = await Claim.find({ policyId: req.params.id });
+    res.json(claims);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
