@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   THEME VARIABLES
+   ========================================================================== */
+:root {
+  /* Dark Theme (Default) */
+  --bg-body: #12141c;          /* Deep dark slate */
+  --bg-surface: #1e212b;       /* Slightly lighter surface for cards/tables */
+  --bg-hover: #262a38;         /* Subtle hover highlight */
+  --border-color: #2e3446;     /* Low contrast border */
+  
+  --text-main: #f3f4f6;        /* Bright but not blinding white */
+  --text-muted: #9ca3af;       /* Soft gray for less important info */
+
+  /* Interactive Elements */
+  --primary: #6366f1;          /* Slightly desaturated indigo for dark mode */
+  --primary-hover: #4f46e5;
+  --input-focus: rgba(99, 102, 241, 0.2);
+
+  /* Status Badges (Dark Mode specific tints) */
+  --badge-pending-bg: rgba(217, 119, 6, 0.15);
+  --badge-pending-text: #fbbf24;
+  
+  --badge-approved-bg: rgba(16, 185, 129, 0.15);
+  --badge-approved-text: #34d399;
+  
+  --badge-rejected-bg: rgba(239, 68, 68, 0.15);
+  --badge-rejected-text: #f87171;
+  
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.14);
+}
+
+/* Light Theme Overrides (Fallback/Optional Switch) */
+body.light-mode {
+  --bg-body: #f0f2f5;
+  --bg-surface: #ffffff;
+  --bg-hover: #fafafa;
+  --border-color: #ddd;
+  
+  --text-main: #333333;
+  --text-muted: #65676b;
+
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --input-focus: rgba(79, 70, 229, 0.1);
+
+  --badge-pending-bg: #fef3c7;
+  --badge-pending-text: #92400e;
+  
+  --badge-approved-bg: #d1fae5;
+  --badge-approved-text: #065f46;
+  
+  --badge-rejected-bg: #fee2e2;
+  --badge-rejected-text: #991b1b;
+  
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   GLOBAL STYLES
+   ========================================================================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  /* Smooth transition when switching themes */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+input, select {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--input-focus);
+}
+
+/* Placeholder styling for dark mode readability */
+input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   TABLES (Claims Log)
+   ========================================================================== */
+/* ... Keep your root variables and body code exactly the same at the top ... */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+th {
+  background: var(--primary);
+  color: #ffffff;
+  padding: 14px 20px;               /* More breathing room */
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;         /* Cleaner dashboard layout styling */
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 16px 20px;               /* Enhanced height prevents accidental clicks */
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* ==========================================================================
+   BUTTON MICROS & INTERACTIONS
+   ========================================================================== */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-1px);      /* Interactive hover lift */
+  filter: brightness(1.08);
+}
+
+button:active {
+  transform: translateY(1px);       /* Click indentation feedback */
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-danger { background: #ef4444; color: white; }
+.btn-success { background: #10b981; color: white; }
+
+/* ... Keep badge properties exactly the same at the bottom ... */
+
+/* ==========================================================================
+   STATUS BADGES
+   ========================================================================== */
+.badge-pending {
+  background: var(--badge-pending-bg);
+  color: var(--badge-pending-text);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-approved {
+  background: var(--badge-approved-bg);
+  color: var(--badge-approved-text);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-rejected {
+  background: var(--badge-rejected-bg);
+  color: var(--badge-rejected-text);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
